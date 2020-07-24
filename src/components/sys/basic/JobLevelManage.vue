@@ -17,13 +17,14 @@
                         :value="item">
                 </el-option>
             </el-select>
-            <el-button type="success" size="mini" icon="el-icon-plus" @click="addJobLevel">添加</el-button>
+            <el-button type="success" size="mini" icon="el-icon-plus" @click="addJobLevel">添加职称</el-button>
             <el-table
                     :data="jobLevels"
                     border
                     stripe
                     class="JobLevelTable"
-                    size="mini">
+                    size="mini"
+                    @selection-change="handleSelectionChange">
                 <el-table-column
                         type="selection"
                         width="50">
@@ -71,6 +72,7 @@
                     </template>
                 </el-table-column>
             </el-table>
+            <el-button type="danger" plain size="mini" style="margin-top: 10px" :disabled="multipleSelection.length == 0" @click="multiDelete">批量删除</el-button>
         </div>
         <el-dialog title="修改职称" :visible.sync="dialogFormVisible"
                    width="30%">
@@ -154,7 +156,8 @@
                     '员级'
                 ],
                 jobLevels: [],
-                dialogFormVisible: false
+                dialogFormVisible: false,
+                multipleSelection  : []
             }
         },
         mounted() {
@@ -188,6 +191,31 @@
                     type: 'warning'
                 }).then(() => {
                     this.deleteRequest("/system/basic/job/" + data.id).then(resp => {
+                        if (resp) {
+                            this.initJobLevels();
+                        }
+                    })
+                }).catch(() => {
+                    this.$message({
+                        type: 'info',
+                        message: '已取消删除'
+                    });
+                });
+            },
+            handleSelectionChange(val){
+                this.multipleSelection = val;
+            },
+            multiDelete(){
+                this.$confirm('此操作将删除【' + this.multipleSelection.length + '】条记录, 是否继续?', '提示', {
+                    confirmButtonText: '确定',
+                    cancelButtonText: '取消',
+                    type: 'warning'
+                }).then(() => {
+                    let ids = '?';
+                    this.multipleSelection.forEach(item=>{
+                        ids += 'ids=' + item.id + '&';
+                    })
+                    this.deleteRequest("/system/basic/job/" + ids).then(resp => {
                         if (resp) {
                             this.initJobLevels();
                         }

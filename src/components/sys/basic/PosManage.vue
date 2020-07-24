@@ -5,12 +5,12 @@
                     placeholder="添加职位"
                     v-model="pos.name"
                     clearable
-                    size="mini"
                     class="PosInput"
                     prefix-icon="el-icon-plus"
-                    @keydown.enter.native="addPosition">
+                    @keydown.enter.native="addPosition"
+                    size="mini">
             </el-input>
-            <el-button type="success" size="mini" icon="el-icon-plus" @click="addPosition">添加</el-button>
+            <el-button size="mini" type="success" icon="el-icon-plus" @click="addPosition">添加</el-button>
         </div>
         <div>
             <el-table
@@ -39,6 +39,15 @@
                         label="创建时间"
                         width="150">
                 </el-table-column>
+                <el-table-column
+                        prop="enabled"
+                        label="是否启用"
+                        width="100">
+                    <template slot-scope="scope">
+                        <el-tag type="success" v-if="scope.row.enabled">已启用</el-tag>
+                        <el-tag type="danger" v-else>未启用</el-tag>
+                    </template>
+                </el-table-column>
                 <el-table-column label="操作">
                     <template slot-scope="scope">
                         <el-button
@@ -53,19 +62,46 @@
                     </template>
                 </el-table-column>
             </el-table>
-            <el-button type="danger" plain size="mini" style="margin-top: 10px" :disabled="multipleSelection.length == 0" @click="multiDelete">批量删除</el-button>
+            <el-button type="danger" plain size="mini" style="margin-top: 10px"
+                       :disabled="multipleSelection.length == 0" @click="multiDelete">批量删除
+            </el-button>
         </div>
         <el-dialog title="修改职位" :visible.sync="dialogFormVisible"
-                    width="30%">
+                   width="30%">
             <div>
-                <el-tag size="mini"style="margin-bottom: 10px">
-                    职位名称
-                </el-tag>
-                <el-input size="mini"
-                        style="margin-bottom: 10px"
-                        v-model="editPos.name"></el-input>
+                <table>
+                    <tr>
+                        <td>
+                            <el-tag size="medium" style="margin-bottom: 10px">
+                                职位名称
+                            </el-tag>
+                        </td>
+                        <td>
+                            <el-input size="mini"
+                                      style="margin-bottom: 10px"
+                                      v-model="editPos.name"
+                            ></el-input>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <el-tag size="medium">
+                                是否启用
+                            </el-tag>
+                        </td>
+                        <td>
+                            <el-switch
+                                    style="display: block"
+                                    v-model="editPos.enabled"
+                                    active-color="#13ce66"
+                                    inactive-color="#ff4949"
+                                    size="mini">
+                            </el-switch>
+                        </td>
+                    </tr>
+                </table>
             </div>
-            <el-button size="mini" @click="dialogFormVisible = false">取 消</el-button>
+            <el-button size="mini" @click="dialogFormVisible = false" style="margin-left: 3px; margin-top: 10px">取 消</el-button>
             <el-button size="mini" type="primary" @click="doUpdate">确 定</el-button>
         </el-dialog>
     </div>
@@ -76,14 +112,15 @@
         data() {
             return {
                 pos: {
-                    name: ''
+                    name: '',
                 },
                 positions: [],
-                editPos : {
-                    name : '',
+                editPos: {
+                    name: '',
+                    enabled : true
                 },
                 dialogFormVisible: false,
-                multipleSelection : []
+                multipleSelection: []
             }
         },
         /**
@@ -136,27 +173,27 @@
             },
             doUpdate() {
                 this.dialogFormVisible = false;
-                this.putRequest("system/basic/pos/", this.editPos).then(resp=>{
-                    if(resp){
+                this.putRequest("system/basic/pos/", this.editPos).then(resp => {
+                    if (resp) {
                         this.initPositions();
                     }
                 })
             },
-            handleSelectionChange(val){
+            handleSelectionChange(val) {
                 this.multipleSelection = val;
             },
-            multiDelete(){
-                this.$confirm('此操作将删除【'+ this.multipleSelection.length +'】条记录，是否继续', '提示', {
+            multiDelete() {
+                this.$confirm('此操作将删除【' + this.multipleSelection.length + '】条记录，是否继续', '提示', {
                     confirmButtonText: '确定',
                     cancelButtonText: '取消',
                     type: 'warning'
                 }).then(() => {
-                    let ids='?';
-                    this.multipleSelection.forEach(item=>{
+                    let ids = '?';
+                    this.multipleSelection.forEach(item => {
                         ids += 'ids=' + item.id + '&';
                     })
-                    this.deleteRequest("system/basic/pos/" + ids).then(resp=>{
-                        if(resp){
+                    this.deleteRequest("system/basic/pos/" + ids).then(resp => {
+                        if (resp) {
                             this.initPositions();
                         }
                     });
@@ -174,11 +211,11 @@
 <style scoped>
     .PosInput {
         width: 300px;
-        margin-right: 10px;
+        margin-right: 5px;
     }
 
     .PosTable {
         margin-top: 20px;
-        width: 60%;
+        width: 70%;
     }
 </style>

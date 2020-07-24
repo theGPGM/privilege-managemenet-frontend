@@ -42,7 +42,7 @@ router.beforeEach((to, from, next) => {
 
 Vue.config.productionTip = false
 
-Vue.use(ElementUI);
+Vue.use(ElementUI, );
 
 /**
  * 挂载模块

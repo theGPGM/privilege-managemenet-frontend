@@ -12,8 +12,8 @@
         <el-tab-pane label="奖惩规则" name="EcManage">
             <EcManage></EcManage>
         </el-tab-pane>
-        <el-tab-pane label="权限组" name="PermissManage">
-            <PermissManage></PermissManage>
+        <el-tab-pane label="权限组" name="PerManage">
+            <PerManage></PerManage>
         </el-tab-pane>
     </el-tabs>
 </template>
@@ -23,13 +23,13 @@
     import JobLevelManage from "../../components/sys/basic/JobLevelManage";
     import PosManage from "../../components/sys/basic/PosManage";
     import EcManage from "../../components/sys/basic/EcManage";
-    import PermissManage from "../../components/sys/basic/PermissManage";
+    import PerManage from "../../components/sys/basic/PerManage";
     export default {
         name: "SysBasic.vue",
-        components: {PermissManage, EcManage, PosManage, DepManage, JobLevelManage},
+        components: {PerManage, EcManage, PosManage, DepManage, JobLevelManage},
         data(){
             return{
-                activeName:'JobLevelManage'
+                activeName:'PosManage'
             }
         },
     }
