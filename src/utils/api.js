@@ -1,5 +1,9 @@
 import router from '../router'
 
+/**
+ * 封装前端请求的工具类
+ * 增删改查
+ */
 axios.interceptors.response.use(success => {
     if (success.status && 200 == success.status && success.data.status == 500) {
         Message.error(success.data.message);
@@ -17,6 +21,7 @@ axios.interceptors.response.use(success => {
         Message.error("权限不足，请联系管理员");
     else if (error.response.status == 401) {
         Message.error("尚未登录，请登录");
+        //跳转登录页
         router.replace('/');
     } else {
         Message.error("未知错误!");

@@ -29,7 +29,7 @@
         components: {PerManage, EcManage, PosManage, DepManage, JobLevelManage},
         data(){
             return{
-                activeName:'PosManage'
+                activeName:'DepManage'
             }
         },
     }

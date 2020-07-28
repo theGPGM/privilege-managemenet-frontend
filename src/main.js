@@ -34,7 +34,8 @@ router.beforeEach((to, from, next) => {
             //请求其他页面，将菜单项注入路由中
             initMenu(router, store);
             next();
-        } else{//未登录
+        } else{
+            //未登录，记录要跳转的页面，跳转到登录页
             next('/?redirect=' + to.path);
         }
     }
@@ -42,7 +43,7 @@ router.beforeEach((to, from, next) => {
 
 Vue.config.productionTip = false
 
-Vue.use(ElementUI, );
+Vue.use(ElementUI);
 
 /**
  * 挂载模块

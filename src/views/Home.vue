@@ -5,16 +5,18 @@
                 <div class="title">
                     GPM 权限管理系统
                 </div>
-                <el-dropdown class="userInfo" @command="commandHandler">
-                  <span class="el-dropdown-link username">
-                    {{user.name}}<i><img :src="user.userface" alt=""></i>
-                  </span>
-                    <el-dropdown-menu slot="dropdown">
-                        <el-dropdown-item command="userInfo">个人中心</el-dropdown-item>
-                        <el-dropdown-item command="setting">设置</el-dropdown-item>
-                        <el-dropdown-item command="logout" divided>注销登录</el-dropdown-item>
-                    </el-dropdown-menu>
-                </el-dropdown>
+                <div>
+                    <el-dropdown class="userInfo" @command="commandHandler">
+                            <span class="el-dropdown-link username" style="align-items: center">
+                        {{user.name}}<i><img :src="user.userface" :alt="user.name"></i>
+                        </span>
+                        <el-dropdown-menu slot="dropdown">
+                            <el-dropdown-item command="userInfo">个人中心</el-dropdown-item>
+                            <el-dropdown-item command="setting">设置</el-dropdown-item>
+                            <el-dropdown-item command="logout" divided>注销登录</el-dropdown-item>
+                        </el-dropdown-menu>
+                    </el-dropdown>
+                </div>
             </el-header>
             <el-container>
                 <el-aside width="200px">
@@ -33,7 +35,7 @@
                     </el-menu>
                 </el-aside>
                 <el-main>
-                    <el-breadcrumb separator="/" v-if="this.$router.currentRoute.path != '/home'" >
+                    <el-breadcrumb separator="/" v-if="this.$router.currentRoute.path != '/home'">
                         <el-breadcrumb-item :to="{ path: '/home' }">首页</el-breadcrumb-item>
                         <el-breadcrumb-item>{{this.$router.currentRoute.name}}</el-breadcrumb-item>
                     </el-breadcrumb>
@@ -85,7 +87,7 @@
 </script>
 
 <style>
-    .homeRouterView{
+    .homeRouterView {
         margin-top: 20px;
     }
 
@@ -128,8 +130,8 @@
 
     .el-dropdown-link img {
         margin-left: 5px;
-        width: 35px;
-        height: 35px;
+        width: 40px;
+        height: 40px;
         border-radius: 100%;
     }
 

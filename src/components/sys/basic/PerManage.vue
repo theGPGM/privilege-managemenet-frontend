@@ -8,7 +8,7 @@
             <el-button @click="addRole" size="mini" type="success" icon="el-icon-plus">添加角色</el-button>
         </div>
         <div style="width: 60%;">
-            <el-collapse accordion @change="change" v-model="activeName">
+            <el-collapse accordion @change="change" v-model="activeName" v-loading="loading">
                 <el-collapse-item :title="r.nameZh" :name="r.id" v-for="(r, index) in roles" :key="index">
                     <el-card class="box-card">
                         <div slot="header" class="clearfix">
@@ -51,16 +51,24 @@
                 },
                 selectedMenus : [],
                 editMenus : [],
-                activeName : -1
+                activeName : -1,
+                loading : false
             }
         },
         mounted() {
             this.initRoles();
         },
         methods: {
-            initRoles() {
+            /**
+             * 初始化所有角色
+             */
+             initRoles() {
+                this.loading = true;
                 this.getRequest("/system/basic/per/").then(resp => {
-                    this.roles = resp;
+                    this.loading = false;
+                    if(resp){
+                        this.roles = resp;
+                    }
                 })
             },
             change(rid){
@@ -69,16 +77,29 @@
                     this.initSelectedMenus(rid);
                 }
             },
+            /**
+             * 初始化所有菜单项
+             */
             initMenus(){
                 this.getRequest("/system/basic/per/menus").then(resp => {
-                    this.allMenus = resp;
+                    if(resp)
+                        this.allMenus = resp;
                 })
             },
+            /**
+             * 通过角色 id 查看角色拥有的可访问菜单项
+             * @param rid
+             */
             initSelectedMenus(rid){
                 this.getRequest("/system/basic/per/menus/" + rid).then(resp => {
                     this.selectedMenus = resp;
                 })
             },
+            /**
+             * 更新角色的可访问资源
+             * @param rid
+             * @param index
+             */
             doUpdate(rid, index){
                 let tree = this.$refs.tree[index];
                 // 只选择子节点
@@ -96,10 +117,14 @@
             addRole() {
                 this.postRequest("system/basic/per/", this.role).then(resp=>{
                     if(resp){
+                        this.role = [];
                         this.initRoles();
                     }
                 })
             },
+            /**
+             * 取消更新
+             */
             cancel(){
                 this.activeName = -1;
             },
@@ -120,7 +145,6 @@
                         message: '已取消删除'
                     });
                 });
-
             }
         }
     }

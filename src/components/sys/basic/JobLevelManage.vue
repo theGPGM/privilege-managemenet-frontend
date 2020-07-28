@@ -22,6 +22,7 @@
                     :data="jobLevels"
                     border
                     stripe
+                    v-loading="loading"
                     class="JobLevelTable"
                     size="mini"
                     @selection-change="handleSelectionChange">
@@ -157,7 +158,8 @@
                 ],
                 jobLevels: [],
                 dialogFormVisible: false,
-                multipleSelection  : []
+                multipleSelection  : [],
+                loading : false
             }
         },
         mounted() {
@@ -165,7 +167,9 @@
         },
         methods: {
             initJobLevels() {
+                this.loading = true;
                 this.getRequest("system/basic/job/").then(resp => {
+                    this.loading = false;
                     if (resp) {
                         this.jobLevels = resp
                     }

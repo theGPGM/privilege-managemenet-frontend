@@ -19,6 +19,7 @@
                     border
                     class="PosTable"
                     size="mini"
+                    v-loading="loading"
                     @selection-change="handleSelectionChange">
                 <el-table-column
                         type="selection"
@@ -120,7 +121,8 @@
                     enabled : true
                 },
                 dialogFormVisible: false,
-                multipleSelection: []
+                multipleSelection: [],
+                loading : false
             }
         },
         /**
@@ -131,7 +133,9 @@
         },
         methods: {
             initPositions() {
+                this.loading = true;
                 this.getRequest("/system/basic/pos/").then(resp => {
+                    this.loading = false;
                     if (resp) {
                         this.positions = resp;
                     }

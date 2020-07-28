@@ -1,6 +1,11 @@
 <template>
     <div>
-        <el-form :rules="rules" ref="loginForm" :model="loginForm" class="loginContainer">
+        <el-form
+                :rules="rules"
+                ref="loginForm"
+                :model="loginForm"
+                class="loginContainer"
+                v-loading="loading">
             <h2 class="loginTitle">系统登录</h2>
             <el-form-item prop="username">
                 <el-input type="text" v-model="loginForm.username" auto-complete="off"
@@ -23,6 +28,7 @@
         name: "Login.vue",
         data() {
             return {
+                loading : false,
                 loginForm: {
                     username: 'admin',
                     password: '123'
@@ -35,16 +41,21 @@
             }
         },
         methods : {
+            /**
+             * 提交登录
+             */
             submitLogin(){
                 this.$refs.loginForm.validate((valid) => {
                     if (valid) {
-                        // alert('submit!');
+                        //加载
+                        this.loading = true;
                         this.postKeyValueRequest('/doLogin', this.loginForm).then(resp => {
+                            this.loading = false;
                             if(resp){
-                                // alert(JSON.stringify(resp));
+                                //将用户放入 session 中
                                 window.sessionStorage.setItem('user', JSON.stringify(resp.obj));
+                                //页面跳转
                                 let path = this.$route.query.redirect;
-                                console.log(path);
                                 this.$router.replace((path == '/' || path == undefined) ? '/home' : path);
                             }
                         })
