@@ -54,7 +54,7 @@
         name: "Home",
         data() {
             return {
-                user: JSON.parse(window.sessionStorage.getItem('user')),
+                user: JSON.parse(localStorage.getItem('user')),
             }
         },
         computed: {
@@ -71,7 +71,7 @@
                         type: 'warning'
                     }).then(() => {
                         this.getRequest('/logout');
-                        window.sessionStorage.removeItem('user')
+                        localStorage.removeItem('user')
                         this.$store.commit('initRoutes', []);
                         this.$router.replace('/')
                     }).catch(() => {

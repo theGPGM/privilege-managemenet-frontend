@@ -1,9 +1,12 @@
-import router from '../router'
-
+import axios from 'axios'
 /**
  * 封装前端请求的工具类
- * 增删改查
  */
+
+/**
+ * 拦截所有响应，根据相关响应状态码执行不同操作
+ */
+import router from '../router'
 axios.interceptors.response.use(success => {
     if (success.status && 200 == success.status && success.data.status == 500) {
         Message.error(success.data.message);
@@ -28,7 +31,7 @@ axios.interceptors.response.use(success => {
     }
     return;
 })
-import axios from 'axios'
+
 
 import {Message} from "element-ui";
 

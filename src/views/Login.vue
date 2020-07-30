@@ -53,7 +53,7 @@
                             this.loading = false;
                             if(resp){
                                 //将用户放入 session 中
-                                window.sessionStorage.setItem('user', JSON.stringify(resp.obj));
+                                localStorage.setItem('user', JSON.stringify(resp.obj));
                                 //页面跳转
                                 let path = this.$route.query.redirect;
                                 this.$router.replace((path == '/' || path == undefined) ? '/home' : path);

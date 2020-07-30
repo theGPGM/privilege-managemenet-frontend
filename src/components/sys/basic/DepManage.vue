@@ -84,7 +84,6 @@
                 this.getRequest("/system/basic/dep/").then(resp => {
                     if (resp) {
                         this.departments = resp;
-                        console.log(this.departments);
                     }
                 })
             },
@@ -99,12 +98,13 @@
             },
             addDep2Deps(deps, dep){
                 for(let i = 0; i < deps.length; i++){
-                    if(deps[i].id == dep.parentId){
-                        deps[i].children = deps[i].children.concat(dep);
-                        deps[i].parent = true;
+                    let d = deps[i];
+                    if(d.id == dep.parentId){
+                        d.children.push(dep);
+                        d.parent = true;
                         return;
                     }else{
-                        this.addDep2Deps(deps[i].children, dep);
+                        this.addDep2Deps(d.children, dep);
                     }
                 }
             },
@@ -118,7 +118,10 @@
                     this.loading = false;
                     if(resp){
                         this.dialogVisible = false;
-                        this.addDep2Deps(this.departments, resp.obj);
+                        let dep = resp.obj;
+                        dep.parent = false;
+                        dep.children = [];
+                        this.addDep2Deps(this.departments, dep);
                         this.aNewDep.name = '';
                     }
                 })
