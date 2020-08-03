@@ -7,12 +7,12 @@
                 </div>
                 <div>
                     <el-dropdown class="userInfo" @command="commandHandler">
-                            <span class="el-dropdown-link username" style="align-items: center">
+                        <span class="el-dropdown-link username" style="align-items: center">
                         {{user.name}}<i><img :src="user.userface" :alt="user.name"></i>
                         </span>
                         <el-dropdown-menu slot="dropdown">
-                            <el-dropdown-item command="userInfo">个人中心</el-dropdown-item>
-                            <el-dropdown-item command="setting">设置</el-dropdown-item>
+                            <el-dropdown-item command="chatRoom">聊天室</el-dropdown-item>
+                            <el-dropdown-item command="hrInfo">个人中心</el-dropdown-item>
                             <el-dropdown-item command="logout" divided>注销登录</el-dropdown-item>
                         </el-dropdown-menu>
                     </el-dropdown>
@@ -50,16 +50,23 @@
 </template>
 
 <script>
+    import router from '../router'
     export default {
         name: "Home",
         data() {
             return {
-                user: JSON.parse(localStorage.getItem('user')),
+                // user: JSON.parse(localStorage.getItem('user')),
             }
+        },
+        mounted() {
+            this.$store.dispatch('connect');
         },
         computed: {
             routes() {
                 return this.$store.state.routes;
+            },
+            user(){
+                return this.$store.state.currentUser;
             }
         },
         methods: {
@@ -80,6 +87,10 @@
                             message: '已取消删除'
                         });
                     });
+                }else if(cmd == 'chatRoom'){
+                    router.replace("/chat");
+                }else if(cmd = 'hrInfo'){
+                    router.replace('/hrInfo')
                 }
             },
         }

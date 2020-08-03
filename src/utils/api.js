@@ -25,6 +25,7 @@ axios.interceptors.response.use(success => {
     else if (error.response.status == 401) {
         Message.error("尚未登录，请登录");
         //跳转登录页
+        localStorage.removeItem("user");
         router.replace('/');
     } else {
         Message.error("未知错误!");
